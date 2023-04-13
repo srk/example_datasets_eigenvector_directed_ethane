@@ -1,0 +1,21 @@
+%NoSave
+%NProcShared=4
+%Mem=4GB
+%chk=ethane_opt.chk
+#P B3LYP/6-311++G(2d,3p) Opt(MaxCycles=999,VeryTight) scf=(xqc,conver=10,maxcycle=999) Int(Grid=Superfine,Acc2e=12) Freq NoSymm Output=WFX
+
+Title Card Required
+
+0 1
+C  0.000000  0.000000  0.000000
+C  1.526924  0.000000 -0.000000
+H -0.397173  1.015470 -0.000000
+H -0.397172 -0.507735  0.879423
+H -0.397172 -0.507736 -0.879423
+H  1.924097 -1.015470  0.000000
+H  1.924097  0.507735 -0.879423
+H  1.924096  0.507736  0.879423
+
+ethane_opt.wfx
+
+
