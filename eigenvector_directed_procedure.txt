@@ -6,27 +6,26 @@ tool such as GaussView or Avogadro is also useful.
 1. Geometry-optimize the molecular geometry of ethene and extract the optimized atomic coordinates as a .xyz-format file. Additionally, generate a WFX
    file for the optimized geometry.
         
-        %NoSave
-        %NProcShared=4
-        %Mem=4GB
-        %chk=ethane_opt.chk
-        #P B3LYP/6-311++G(2d,3p) Opt(MaxCycles=999,VeryTight) scf=(xqc,conver=10,maxcycle=999)
-           Int(Grid=Superfine,Acc2e=12) Freq NoSymm Output=WFX
-        
-        Initial ethane geometry optimization
-        
-        0 1
-        C  0.000000  0.000000  0.000000
-        C  1.526924  0.000000 -0.000000
-        H -0.397173  1.015470 -0.000000
-        H -0.397172 -0.507735  0.879423
-        H -0.397172 -0.507736 -0.879423
-        H  1.924097 -1.015470  0.000000
-        H  1.924097  0.507735 -0.879423
-        H  1.924096  0.507736  0.879423
-        
-        ethane_opt.wfx
-        
+    %NoSave
+    %NProcShared=4
+    %Mem=4GB
+    %chk=ethane_opt.chk
+    #P B3LYP/cc-pVQZ Opt(MaxCycles=999,VeryTight) scf=(xqc,conver=10,maxcycle=999) Int(Ultrafine) Freq NoSymm Output=WFX
+    
+    ethane optimization B3LYP/cc-pVQZ
+    
+    0 1
+    C  0.000000  0.000000  0.000000
+    C  1.526924  0.000000 -0.000000
+    H -0.397173  1.015470 -0.000000
+    H -0.397172 -0.507735  0.879423
+    H -0.397172 -0.507736 -0.879423
+    H  1.924097 -1.015470  0.000000
+    H  1.924097  0.507735 -0.879423
+    H  1.924096  0.507736  0.879423
+    
+    ethane_opt.wfx
+    
         
 2.  Once this has completed, and one has checked that the resulting structure is a local energy minimum (i.e. no imaginary frequencies 
     in the Gaussian output) one can either extract the optimized coordinates in .xyz format by loading the Gaussian output file into 
@@ -41,9 +40,9 @@ tool such as GaussView or Avogadro is also useful.
         xyzalign ethane_opt.xyz ethane_opt_align.xyz 1 2 3
 
 4. Run a constrained optimization, scanning the specified dihedral angle parameter, using the aligned geometry-optimized
-   structure in ethane_opt_align.xyz as a starting point. Atom C1 is constrained to stay at the coordinate origin, the 
-   length of the C1-C2 bond is constrained and the dihedral angle is scanned in steps of 1 degree, for 180 steps. The .log 
-   file produced by G09 when the scan is completed contains the full details of the progress of the constrained optimization scan.
+   structure in ethane_opt_align.xyz as a starting point. Atom C1 is constrained to stay at the coordinate origin and the
+   dihedral angle is scanned in steps of 1 degree, for 180 steps. The .log output file produced by G09 when the scan is 
+   completed contains the full details of the progress of the constrained optimization scan.
    
    Do two such constrained optimization scans: one where the angle step is +1.0 degrees, and another where the angle step is 
    -1.0 degrees.
@@ -53,24 +52,24 @@ tool such as GaussView or Avogadro is also useful.
         %NoSave
         %NProcShared=4
         %Mem=4GB
-        %chk=ethane_opt_align_angleplus.chk
-        #P B3LYP/6-311++G(2d,3p) Opt(Modredundant,MaxCycles=999,VeryTight) scf=(xqc,conver=10,maxcycle=999) Int(Grid=Superfine,Acc2e=12) NoSymm
+        %chk=ethane_opt_align_angleplus_Q_H3C1C2C6.chk
+        #P B3LYP/cc-pVQZ Opt(Modredundant,MaxCycles=999,VeryTight) scf=(xqc,conver=10,maxcycle=999) Int(Ultrafine) NoSymm
         
-        Torsion of dihedral H3-C1-C2-H6, C1 fixed at origin, C1-C2 bond length fixed
+        Torsion of dihedral H3-C1-C2-H6, C1 fixed at origin
         
         0 1
         C  0.000000  0.000000  0.000000
-        C  1.528903  0.000000  0.000000
-        H -0.397165  1.015975  0.000000
-        H -0.397165 -0.507987  0.879860
-        H -0.397165 -0.507987 -0.879860
-        H  1.926067 -1.015975  0.000000
-        H  1.926067  0.507987 -0.879860
-        H  1.926067  0.507987  0.879860
+        C  1.526925 -0.000000  0.000000
+        H -0.397173  1.015461  0.000000
+        H -0.397164 -0.507733  0.879416
+        H -0.397164 -0.507733 -0.879416
+        H  1.924095 -1.015462 -0.000000
+        H  1.924090  0.507731 -0.879417
+        H  1.924090  0.507731  0.879417
         
         X 1 F
-        B 1 2 F
         D 3 1 2 6 S 180 1.0
+
                
    
 5. Extract a multi-step .xyz file containing the atomic coordinates at every step in the dihedral angle scan

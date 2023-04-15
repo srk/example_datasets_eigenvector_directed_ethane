@@ -1,0 +1,149 @@
+Procedure for generation of a trajectory from a list of .sumviz files
+=====================================================================
+
+This tutorial assumes that all of the mentioned QuantVec Python codes mentioned below, along
+with their dependencies, have been previously installed into the user's Python environment, 
+using, e.g. 'pip install'. It also assumes the use of a 'bash'-compatible shell with output 
+redirection, pipes and Unix commands such as 'mkdir','ls','tee', and 'grep' available. MS Windows users
+can obtain a 'bash' shell by using BusyBox [] or Cygwin [].
+
+1. Make a specific directory to hold the .sumviz files previously created for this trajectory.
+   Copy all the relevant .sumviz files into this newly-created directory, then make this directory your current directory, e.g.
+   
+       mkdir trajectory; cp *.sumviz trajectory/ ; cd trajectory/
+
+2. Create a text file containing an ordered list of the names of the .sumviz files previously created for this trajectory, 
+   one name per line. For example, the command:
+
+       ls -1 *.sumviz > sumviz_filelist.txt
+   
+   should make a text file 'sumviz_filelist.txt' with a list of .sumviz filenames that looks like:
+   
+   ethane_opt_align_angleplus_0000.sumviz
+   ethane_opt_align_angleplus_0001.sumviz   
+   .. 
+   and so on.
+
+3. Run the projection code 'drproject3' (interactive), sending the output both to the screen and a text file
+   to capture the output for further processing using the 'tee' command.
+   
+       drproject3 sumviz_filelist.txt | tee ethane_angleplus_drproject.txt
+   
+   The program will then open the file list you provided, and loads all of the .sumviz files mentioned, in order, therein.
+   A count of the loaded .sumviz files is shown, and then the program prompts for its first interactive input from the user, e.g.
+
+       Do you want to define a new origin of coordinates?
+       1: No - use existing origin
+       2: Yes - use an atomic position as new origin, extra atomic positions to define frame
+
+       Enter choice or 99 to go back/exit: 1
+       
+    Usually (and for this example) we do not want to redefine the origin of coordinates, so we type '1' and press the Return key.
+    The program prints confirmation of this choice, and then allows selection of a subset of critical points, e.g. bond critical points (BCPs).
+    'All BCPs' is the usual choice.
+    
+        Using conventional origin and axes - no additional alignment
+        Select a subset of CPs for analysis
+        1: Closed shell BCPs
+        2: Shared shell BCPs
+        3: All BCPs
+        4: All NACPs
+        5: All RCPs
+        6: All CCPs
+        7: All CPs
+    
+        Enter choice or 99 to go back/exit: 3
+
+    The program confirms this choice, shows the names of the first and last .sumviz file (which hold the molecular graph data)
+    names, then asks the user which .sumviz file should be used to provide the reference eigenvectors e1,e2,e3, e.g.
+
+        Selected all BCPs
+
+        First file in input list: ethane_opt_align_angleplus_0000.sumviz
+        Last file in input list : ethane_opt_align_angleplus_0181.sumviz
+        Which file from the input list should be used for projection axes?
+        1: First file in the input list -  ethane_opt_align_angleplus_0000.sumviz
+        2: Last file in the input list - ethane_opt_align_angleplus_0181.sumviz
+        3: File from specific numbered position in the list (0=first file)
+        4: Previous file in the input list (tracking)
+
+        Enter choice or 99 to go back/exit: 1
+        
+    The reference for the projection axes is taken in our analyses to be the *first* file in the input list (option 1). This first file
+    can correspond to the starting point in a time series, or a sensible reference point in the sequence (e.g. in the case of tracking
+    down an intrinsic reaction coordinate (IRC) path in a molecule, from a transition state to an local minimum on the potential energy surface,
+    the first file will correspond to the transition state molecular graph and the last file will correspond to the local energy minimum at the
+    end of the IRC path).
+    Additionally, the program provides the ability to use a *different* set of reference (projection) eigenvectors in each trajectory step, using
+    option '4'. In this 'tracking' mode, at each step (i.e. calculating a CP shift between step s-1 and step s), the reference (projection) 
+    eigenvectors are taken from the molecular graph for step s-1, rather than a specific position in the file list. This extra 'tracking' mode has
+    never been used in our work to date, but is provided for completeness. 
+    
+    The program then proceeds to construct the step-by-step projections of the critical point shifts dr onto the reference eigenvectors, outputting
+    these projections (and the magnitude of the shift 'moddr') for both the standard Hessian(rho) eigenvectors and the stress tensor eigenvectors for each
+    selected type of critical point in the molecular graph. The projections are calculated for each recognised BCP.
+    
+    Note: it can occasionally occur that the labelled identities of critical points can change during a sequence of molecular graphs. The program
+    relies on the labelled identity of the critical points staying the same across all the .sumviz files. In situations where a CP vanishes between
+    one molecular graph and the next molecular graph in the sequence, or when a previously nonexistent CP suddenly appears, the program will pause and
+    ask the user what to do. Provided options include: a) treating the new labelled CP as if it is actually just a renamed version of the same physical CP
+    that appears under a different name in the previous molecular graph: in this case, the user is prompted to identify its 'old' name, or b) ignoring 
+    this CP for the rest of the sequence.
+ 
+4.  The trajectory information for a specific chosen CP can then be filtered out of the output file from 'drproject3'. For this example, we might
+    want to obtain the trajectory for BCP C1-C2:
+
+       grep ' C1-C2 ' ethane_angleplus_drproject.txt > ethane_angleplus_drproject_C1-C2.txt
+       
+    Note the spaces (essential!) on either side of the BCP name in the search expression for the 'grep' command.
+    
+4b. An optional supplementary 'denoising' step may be needed for the trajectory data at this point in the process. We have previously found that
+    in the case of a trajectory derived from an IRC pathway, that the change in CP position can be anomalously large relative to the other steps at the
+    beginning and end of the trajectory. In this case, this is due to the IRC tracking algorithm implementation used in the accompanying electronic structure
+    code. In our previous work, the magnitude of the first step down the IRC path away from a properly-converged transition state was not 
+    controllable, unlike the magnitude of subsequent steps for which a maximum magnitude could be specified. Similarly, IRC algorithms tend not to go all the
+    way to the 'end' energy local minimum, so that the CP shift associated with the last IRC step is considerably smaller than the CP shift calculated from
+    the IRC endpoint to the actual separately-converged local energy minimum produced by geometry optimization. This effect, where the first and last CP
+    shift are anomalously large relative to the other CP shifts, also occurs in eigenvector-directed trajectories for constrained torsional scans. Hence, we always ignore the first and last step of calculated trajectories: see the SM section on 'Denoising trajectories' for further details.
+    
+    
+5.  The trajectory can then be plotted for visual inspection, and calculation of the 'bounding box' dimensions {dr.e1_max, dr.e2_max, dr.e3_max}, using
+    the program 'trajplot'. The input file for 'trajplot' looks like this:
+    
+    # comments, followed by one line per trajectory data file
+    # Data file name, line colour, line type symbol, marker symbol, filled(full)/empty(none) marker symbol, marker size, filter string
+    # Filter string is multiple invocations of 'turn'/'avg'/'none' filtering procedures. Multiple filter passes indicated by '+'
+    ethane_angleplus_drproject_C1-C2.txt red - o full 5 avg+avg+avg
+    
+    The program is run thus:
+    
+    trajplot trajplot_in.txt --matrix stress --modulus no 
+    
+    The 'trajplot' program loads each named trajectory data file specified in the 'trajplot' input file in turn, first applying any requested noise filtering operations, then drawing each trajectory on the screen in a 3-D interactive rotatable plot using the line and symbol attributes specified. If CSV-format (Comma-Separated Variable: easily importable into visualization tools, plotting packages and spreadsheets) output has been selected, each filtered trajectory is output to a separate named CSV file for future analysis or plotting. Bitmap images of user-created plots may also be saved (in several widely-used image data formats) from within the 'trajplot' program. Additionally, 'trajplot' prints information about the 'bounding box' values for each filtered trajectory. The full list of command-line options is accessible using the --help command line parameter:
+    
+    trajplot --help
+
+    Optional: 'Denoising' trajectories
+    It is sometimes required to pre-screen the extracted CP trajectory data for 'transient' noise, which can appear on the first and last line of the output
+    file from 4. above, but which can also appear elsewhere in the trajectory. A convenient way to check the trajectory for such transients in trajectory
+    data is to use the command:
+
+    screentraj ethane_angleplus_drproject_C1-C2.txt
+
+    This opens a graphical window (using the Matplotlib library) showing the dependence of the modulus of each BCP shift (y-axis) on the step
+    number(x-axis). Trajectory steps which have a very large modulus relative to immediately preceding or subsequent steps, showing up as large 'one-point' 
+    deviations from the locally smooth variation of the modulus from one step to the next, are an artefact of the convergence behaviour of the underlying 
+    electronic structure code.
+
+    Hovering the mouse pointer over any transient points allows identification of the specific 'noisy' points. These transient points can then be manually
+    filtered out by 'commenting out', using a text editor, the corresponding lines in the BCP trajectory data using a leading ‘#’ character. We always 
+    comment out at least the first and last line of these trajectory files, as the corresponding steps very frequently have spuriously large values in the
+    final (‘moddr’) column relative to the nearby points, regardless of the physical system or the details of how the sequence of .sumviz files has been 
+    created. 
+    What should remain after this pre-screening process is a relatively smooth dependence on the shift modulus with trajectory step.
+
+    The available filters for numerical noise in 'trajplot' are 'none' (i.e. does not change the data), 'turn', which rejects points where the trajectory 
+    turns by more than a specific threshold angle, and 'avg' which 'smooths' the trajectory using an averaging procedure on pairs of successive trajectory 
+    points - these filter procedures are described in S1. The most frequently used filters are 'none' and 'avg'. The 'trajplot' program displays information 
+    about any denoising operations that are used.
+    

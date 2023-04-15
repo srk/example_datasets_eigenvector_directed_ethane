@@ -1,0 +1,3 @@
+# lines starting with hash character are ignored 
+# datafile linecolour linestyle markersymbol markerfill markersize filterstring
+ethane_angleplus_drproject_C1-C2.txt red - o full 5 avg+avg+avg

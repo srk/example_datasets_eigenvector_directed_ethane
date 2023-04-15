@@ -2,9 +2,9 @@
 %NProcShared=4
 %Mem=4GB
 %chk=ethane_opt.chk
-#P B3LYP/6-311++G(2d,3p) Opt(MaxCycles=999,VeryTight) scf=(xqc,conver=10,maxcycle=999) Int(Grid=Superfine,Acc2e=12) Freq NoSymm Output=WFX
+#P B3LYP/cc-pVQZ Opt(MaxCycles=999,VeryTight) scf=(xqc,conver=10,maxcycle=999) Int(Ultrafine) Freq NoSymm Output=WFX
 
-Title Card Required
+ethane optimization B3LYP/cc-pVQZ
 
 0 1
 C  0.000000  0.000000  0.000000
@@ -17,5 +17,3 @@ H  1.924097  0.507735 -0.879423
 H  1.924096  0.507736  0.879423
 
 ethane_opt.wfx
-
-

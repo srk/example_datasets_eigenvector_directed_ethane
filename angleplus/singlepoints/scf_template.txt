@@ -2,9 +2,9 @@
 %NProcShared=4
 %Mem=4GB
 %chk=<name>.chk
-#P B3LYP/6-311++G(2d,3p) scf=(xqc,conver=10,maxcycle=999) Int(Grid=Superfine,Acc2e=12) NoSymm Output=WFX
+#P B3LYP/cc-pVQZ scf=(xqc,conver=10,maxcycle=999) Int(Ultrafine) NoSymm Output=WFX
 
-Single point template
+Title Card Required
 
 0 1
 <xyz>

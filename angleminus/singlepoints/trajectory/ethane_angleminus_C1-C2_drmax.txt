@@ -1,0 +1,66 @@
+
+trajplot
+========
+Usage: trajplot <file containing list of files in desired sequence>
+Input file format: each line has the format
+              datafilename linecolour linestyle markersymbol markerfill markersize filterstring
+              e.g. data.txt red - o full 5 avg+avg+avg
+              Blank lines or lines starting with # are ignored. filterstring = 'none' or sequences of filter operations e.g. 'avg','turn'
+              If a header line of the form '# curvelabelstring' is found in the input data header, it is used to set the curve label
+
+Running C:\Python\WPy64-3940\python-3.9.4.amd64\Scripts\trajplot on win32 using Python 3.9.4 (tags/v3.9.4:1f2e308, Apr  6 2021, 13:40:21) [MSC v.1928 64 bit (AMD64)]
+Current working directory: C:\Users\steve\Desktop\ChemSocRev\new_tut_rev\CSR examples\ethane\replacement_angleminus\singlepoints\trajectory
+C:\Python\WPy64-3940\python-3.9.4.amd64\Scripts\trajplot trajplot_in.txt --matrix stress --modulus no
+VERSION 20220607.0001
+
+Input file: trajplot_in.txt
+
+Projecting onto stress tensor eigenvectors
+
+Modulus operator NOT applied to plot coordinates
+Rounding projected coordinates < 1e-14 to exactly zero
+Turn filter max. turning angle = 60.0 degrees
+Enter additional title text, or just press Return: Skipped: # lines starting with hash character are ignored 
+
+Skipped: # datafile linecolour linestyle markersymbol markerfill markersize filterstring
+
+ethane_angleminus_drproject_C1-C2.txt red - o full 5 avg+avg+avg
+
+Skipped: #
+Skipped: #ethane_opt_align_angleminus_0001.sumviz C1-C2        -0.0036271202  -0.99999341 0.00015246089  -0.99999341 -0.0036271564 0.0001524626  0.002063931
+
+Fetching curve label from second field on data line:
+ethane_opt_align_angleminus_0002.sumviz C1-C2        -0.026826578  -0.99951854  0.015588991  -0.99951854 -0.026826607  0.015589004 0.00045911489
+
+Skipped: #ethane_opt_align_angleminus_0181.sumviz C1-C2          0.99999364 0.0033285671 -0.0012834515 0.0033285308   0.99999364 -0.0012839216  0.002289357
+
+TRAJECTORY ANALYSIS:
+Trajectory has 179 points
+Filtering a trajectory of length 179
+Prescreened 0 points as transients
+Using 2-point averaging algorithm
+Created averaged trajectory of length 179
+Filter detected 0 transients
+0/179 points are now flagged as possible transients
+Filtering a trajectory of length 179
+Prescreened 0 points as transients
+Using 2-point averaging algorithm
+Created averaged trajectory of length 179
+Filter detected 0 transients
+0/179 points are now flagged as possible transients
+Filtering a trajectory of length 179
+Prescreened 0 points as transients
+Using 2-point averaging algorithm
+Created averaged trajectory of length 179
+Filter detected 0 transients
+0/179 points are now flagged as possible transients
+infilename = ethane_angleminus_drproject_C1-C2.txt
+Plotting trajectory 1 with 179 points
+** Click on curve points for more information or close figure for summary **
+
+Sums of plotted trajectory lengths
+Name                                  U-space path length  Real-space path length(au)
+ethane_angleminus_drproject_C1-C2.txt 0.0034028491921234  0.06886784955
+== Bounding Box lengths [ (e1.dr)_max, .. ] for output trajectories ==
+ethane_angleminus_drproject_C1-C2.txt:  0.0007712521735712395, 0.0007481549246951481, 0.0006979665682601578 
+======================================================================

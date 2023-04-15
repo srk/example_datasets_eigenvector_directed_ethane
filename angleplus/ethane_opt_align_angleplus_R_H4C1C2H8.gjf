@@ -1,23 +1,22 @@
 %NoSave
 %NProcShared=4
 %Mem=4GB
-%chk=ethane_opt_align_angleplus_R_H4C1C2H8.chk
-#P B3LYP/6-311++G(2d,3p) Opt(Modredundant,MaxCycles=999,VeryTight) scf=(xqc,conver=10,maxcycle=999) Int(Grid=Superfine,Acc2e=12) NoSymm
+%chk=ethane_opt_align_angleplus_R_H4C1C2C8.chk
+#P B3LYP/cc-pVQZ Opt(Modredundant,MaxCycles=999,VeryTight) scf=(xqc,conver=10,maxcycle=999) Int(Ultrafine) NoSymm
 
-Torsion of dihedral H4-C1-C2-H8, C1 fixed at origin, C1-C2 bond length fixed
+Torsion of dihedral H4-C1-C2-H8, C1 fixed at origin
 
 0 1
 C  0.000000  0.000000  0.000000
-C  1.528903  0.000000  0.000000
-H -0.397165  1.015975  0.000000
-H -0.397165 -0.507987  0.879860
-H -0.397165 -0.507987 -0.879860
-H  1.926067 -1.015975  0.000000
-H  1.926067  0.507987 -0.879860
-H  1.926067  0.507987  0.879860
+C  1.526925 -0.000000  0.000000
+H -0.397173  1.015461  0.000000
+H -0.397164 -0.507733  0.879416
+H -0.397164 -0.507733 -0.879416
+H  1.924095 -1.015462 -0.000000
+H  1.924090  0.507731 -0.879417
+H  1.924090  0.507731  0.879417
 
 X 1 F
-B 1 2 F
 D 4 1 2 8 S 180 1.0
 
 
